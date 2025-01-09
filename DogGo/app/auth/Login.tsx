@@ -7,6 +7,7 @@ const LoginScreen: React.FC = () => {
   const [isSignup, setIsSignup] = useState(true); // Toggle between signup and login
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [signupPassword, setSignupPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [dogName, setDogName] = useState('');
@@ -14,9 +15,17 @@ const LoginScreen: React.FC = () => {
   const [dogGender, setDogGender] = useState('Boy');
   const [dogAge, setDogAge] = useState(1);
 
-  const handleSubmit = () => {
+  const handleToggle = (targetSignup: boolean) => {
+    if (isSignup !== targetSignup) {
+      setIsSignup(targetSignup);
+    } else {
+      handleAction();
+    }
+  };
+
+  const handleAction = () => {
     if (isSignup) {
-      console.log({ firstName, lastName, email, dogName, dogBreed, dogGender, dogAge });
+      console.log({ firstName, lastName, email, signupPassword, dogName, dogBreed, dogGender, dogAge });
       // Signup logic here
     } else {
       console.log({ email, password });
@@ -34,17 +43,30 @@ const LoginScreen: React.FC = () => {
           <>
             <TextInput
               style={styles.input}
-              placeholder="First Name"
+              placeholder="Full Name"
               placeholderTextColor="#666"
-              value={firstName}
-              onChangeText={setFirstName}
+              value={`${firstName} ${lastName}`.trim()}
+              onChangeText={(text) => {
+                const [first, ...last] = text.split(' ');
+                setFirstName(first);
+                setLastName(last.join(' '));
+              }}
             />
             <TextInput
               style={styles.input}
-              placeholder="Last Name"
+              placeholder="Email"
               placeholderTextColor="#666"
-              value={lastName}
-              onChangeText={setLastName}
+              keyboardType="email-address"
+              value={email}
+              onChangeText={setEmail}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              placeholderTextColor="#666"
+              secureTextEntry
+              value={signupPassword}
+              onChangeText={setSignupPassword}
             />
             <TextInput
               style={styles.input}
@@ -87,7 +109,7 @@ const LoginScreen: React.FC = () => {
           </>
         )}
 
-        {/* Email and Password Fields */}
+        {/* Login Fields */}
         {!isSignup && (
           <>
             <TextInput
@@ -113,21 +135,17 @@ const LoginScreen: React.FC = () => {
         <View style={styles.buttonRow}>
           <TouchableOpacity
             style={[styles.toggleButton, isSignup ? styles.activeButton : null]}
-            onPress={() => setIsSignup(true)}
+            onPress={() => handleToggle(true)}
           >
             <Text style={styles.toggleButtonText}>Sign Up</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.toggleButton, !isSignup ? styles.activeButton : null]}
-            onPress={() => setIsSignup(false)}
+            onPress={() => handleToggle(false)}
           >
             <Text style={styles.toggleButtonText}>Log In</Text>
           </TouchableOpacity>
         </View>
-
-        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-          <Text style={styles.submitButtonText}>{isSignup ? 'Submit' : 'Log In'}</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );
@@ -231,17 +249,6 @@ const styles = StyleSheet.create({
   toggleButtonText: {
     color: '#333',
     fontSize: 16,
-  },
-  submitButton: {
-    backgroundColor: '#FFA500', // Orange (logo orange)
-    padding: 15,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  submitButtonText: {
-    color: '#FFF',
-    fontSize: 18,
-    fontWeight: 'bold',
   },
 });
 
