@@ -1,20 +1,27 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import DogBreeds from '../../constants/DogBreeds'; 
+import DogBreeds from '../../constants/DogBreeds';
 
 const LoginScreen: React.FC = () => {
+  const [isSignup, setIsSignup] = useState(true); // Toggle between signup and login
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
   const [dogName, setDogName] = useState('');
   const [dogBreed, setDogBreed] = useState('');
   const [dogGender, setDogGender] = useState('Boy');
   const [dogAge, setDogAge] = useState(1);
 
-  const handleLogin = () => {
-    console.log({ firstName, lastName, email, dogName, dogBreed, dogGender, dogAge });
-    // Add login logic here
+  const handleSubmit = () => {
+    if (isSignup) {
+      console.log({ firstName, lastName, email, dogName, dogBreed, dogGender, dogAge });
+      // Signup logic here
+    } else {
+      console.log({ email, password });
+      // Login logic here
+    }
   };
 
   return (
@@ -22,70 +29,104 @@ const LoginScreen: React.FC = () => {
       <View style={styles.formBox}>
         <Text style={styles.title}>Welcome to DogGo!</Text>
 
-        <TextInput
-          style={styles.input}
-          placeholder="First Name"
-          placeholderTextColor="#666"
-          value={firstName}
-          onChangeText={setFirstName}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Last Name"
-          placeholderTextColor="#666"
-          value={lastName}
-          onChangeText={setLastName}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          placeholderTextColor="#666"
-          keyboardType="email-address"
-          value={email}
-          onChangeText={setEmail}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Dog Name"
-          placeholderTextColor="#666"
-          value={dogName}
-          onChangeText={setDogName}
-        />
-        <Picker
-          selectedValue={dogBreed}
-          style={styles.picker}
-          onValueChange={(itemValue) => setDogBreed(itemValue)}
-        >
-        {DogBreeds.map((breed) => (
-        <Picker.Item
-              key={breed.value}
-              label={breed.label}
-              value={breed.value}
-              color="#333"
+        {/* Signup Fields */}
+        {isSignup && (
+          <>
+            <TextInput
+              style={styles.input}
+              placeholder="First Name"
+              placeholderTextColor="#666"
+              value={firstName}
+              onChangeText={setFirstName}
             />
-          ))}
-        </Picker>
-        <View style={styles.checkboxContainer}>
-          <TouchableOpacity onPress={() => setDogGender('Boy')}>
-            <Text style={[styles.checkbox, dogGender === 'Boy' && styles.selected]}>Boy</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Last Name"
+              placeholderTextColor="#666"
+              value={lastName}
+              onChangeText={setLastName}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Dog Name"
+              placeholderTextColor="#666"
+              value={dogName}
+              onChangeText={setDogName}
+            />
+            <Picker
+              selectedValue={dogBreed}
+              style={styles.picker}
+              onValueChange={(itemValue) => setDogBreed(itemValue)}
+            >
+              {DogBreeds.map((breed) => (
+                <Picker.Item
+                  key={breed.value}
+                  label={breed.label}
+                  value={breed.value}
+                  color="#333"
+                />
+              ))}
+            </Picker>
+            <View style={styles.checkboxContainer}>
+              <TouchableOpacity onPress={() => setDogGender('Boy')}>
+                <Text style={[styles.checkbox, dogGender === 'Boy' && styles.selected]}>Boy</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => setDogGender('Girl')}>
+                <Text style={[styles.checkbox, dogGender === 'Girl' && styles.selected]}>Girl</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.ageContainer}>
+              <TouchableOpacity onPress={() => setDogAge(Math.max(1, dogAge - 1))}>
+                <Text style={styles.ageButton}>-</Text>
+              </TouchableOpacity>
+              <Text style={styles.ageText}>{dogAge} years</Text>
+              <TouchableOpacity onPress={() => setDogAge(dogAge + 1)}>
+                <Text style={styles.ageButton}>+</Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
+
+        {/* Email and Password Fields */}
+        {!isSignup && (
+          <>
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              placeholderTextColor="#666"
+              keyboardType="email-address"
+              value={email}
+              onChangeText={setEmail}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              placeholderTextColor="#666"
+              secureTextEntry
+              value={password}
+              onChangeText={setPassword}
+            />
+          </>
+        )}
+
+        {/* Action Buttons */}
+        <View style={styles.buttonRow}>
+          <TouchableOpacity
+            style={[styles.toggleButton, isSignup ? styles.activeButton : null]}
+            onPress={() => setIsSignup(true)}
+          >
+            <Text style={styles.toggleButtonText}>Sign Up</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setDogGender('Girl')}>
-            <Text style={[styles.checkbox, dogGender === 'Girl' && styles.selected]}>Girl</Text>
+          <TouchableOpacity
+            style={[styles.toggleButton, !isSignup ? styles.activeButton : null]}
+            onPress={() => setIsSignup(false)}
+          >
+            <Text style={styles.toggleButtonText}>Log In</Text>
           </TouchableOpacity>
         </View>
 
-        <View style={styles.ageContainer}>
-          <TouchableOpacity onPress={() => setDogAge(Math.max(1, dogAge - 1))}>
-            <Text style={styles.ageButton}>-</Text>
-          </TouchableOpacity>
-          <Text style={styles.ageText}>{dogAge} years</Text>
-          <TouchableOpacity onPress={() => setDogAge(dogAge + 1)}>
-            <Text style={styles.ageButton}>+</Text>
-          </TouchableOpacity>
-        </View>
-
-        <TouchableOpacity style={styles.submitButton} onPress={handleLogin}>
-          <Text style={styles.submitButtonText}>Submit</Text>
+        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+          <Text style={styles.submitButtonText}>{isSignup ? 'Submit' : 'Log In'}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -125,7 +166,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
     backgroundColor: '#FFF',
-    color: '#333', // Input text color
+    color: '#333',
   },
   picker: {
     width: '100%',
@@ -168,6 +209,28 @@ const styles = StyleSheet.create({
   ageText: {
     fontSize: 18,
     color: '#333',
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  toggleButton: {
+    flex: 1,
+    padding: 10,
+    marginHorizontal: 5,
+    borderWidth: 1,
+    borderColor: '#CCC',
+    borderRadius: 5,
+    backgroundColor: '#FFF',
+    alignItems: 'center',
+  },
+  activeButton: {
+    backgroundColor: '#ADD8E6',
+  },
+  toggleButtonText: {
+    color: '#333',
+    fontSize: 16,
   },
   submitButton: {
     backgroundColor: '#FFA500', // Orange (logo orange)
