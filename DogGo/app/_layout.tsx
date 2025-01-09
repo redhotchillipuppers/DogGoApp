@@ -1,47 +1,57 @@
 import React, { useState, useEffect } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
-import { Slot } from 'expo-router'; // Assuming you use Expo Router
+import { useRouter, Slot } from 'expo-router';
 
 const Layout: React.FC = () => {
   const [isSplashVisible, setIsSplashVisible] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsSplashVisible(false);
-    }, 3000); // 3 seconds
+      setIsSplashVisible(false); // Hide splash screen after 3 seconds
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    if (!isSplashVisible) {
+      router.replace('/auth/Login'); // Navigate to the login screen
+    }
+  }, [isSplashVisible, router]);
+
   if (isSplashVisible) {
     return (
-      <View style={styles.container}>
+      <View style={styles.splashContainer}>
         <Image
-          source={require('../../assets/SplashScreen/SplashScreen.jpg')}
-          style={styles.image}
+          source={require('../assets/SplashScreen/SplashScreen.jpg')}
+          style={styles.splashImage}
         />
       </View>
     );
   }
 
   return (
-    <View style={{ flex: 1 }}>
-      <Slot /> {/* Main navigation content */}
+    <View style={styles.container}>
+      <Slot /> {/* Always render Slot for navigation */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  splashContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#FFF',
   },
-  image: {
+  splashImage: {
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
+  },
+  container: {
+    flex: 1,
   },
 });
 
