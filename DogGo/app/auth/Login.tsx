@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { AntDesign, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../firebase/firebaseConfig';
+import { useNavigation } from '@react-navigation/native';
+import { useRouter, Slot, router } from 'expo-router';
 
 const LoginScreen: React.FC = () => {
   const [isSignup, setIsSignup] = useState(true); // Toggle between signup and login
@@ -11,6 +15,8 @@ const LoginScreen: React.FC = () => {
   const [lastName, setLastName] = useState('');
   const [dogName, setDogName] = useState('');
 
+  const navigation = useNavigation();
+
   const handleToggle = (targetSignup: boolean) => {
     if (isSignup !== targetSignup) {
       setIsSignup(targetSignup);
@@ -19,9 +25,9 @@ const LoginScreen: React.FC = () => {
     }
   };
 
-  const handleAction = () => {
+  const handleAction = async () => {
     if (isSignup) {
-      // Signup Validation
+      // Sign-Up Logic with Firebase
       if (!firstName || !lastName || !email || !signupPassword || !dogName) {
         alert('Please fill out all fields.');
         return;
@@ -34,10 +40,17 @@ const LoginScreen: React.FC = () => {
         alert('Password must be at least 6 characters long.');
         return;
       }
-      console.log('Sign-Up Successful:', { firstName, lastName, email, signupPassword, dogName });
-      // Proceed with sign-up logic
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, signupPassword);
+        console.log('Sign-Up Successful:', userCredential.user);
+        alert('Sign-Up Successful!');
+        router.push('/DogEdit');
+      } catch (error) {
+        console.error('Error signing up:', error.message);
+        alert(error.message);
+      }
     } else {
-      // Login Validation
+      // Log-In Logic with Firebase
       if (!email || !password) {
         alert('Please enter your email and password.');
         return;
@@ -50,8 +63,15 @@ const LoginScreen: React.FC = () => {
         alert('Password must be at least 6 characters long.');
         return;
       }
-      console.log('Log-In Successful:', { email, password });
-      // Proceed with login logic
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        console.log('Log-In Successful:', userCredential.user);
+        alert('Log-In Successful!');
+        navigation.navigate('Main'); // Example of navigating to main screen after login
+      } catch (error) {
+        console.error('Error logging in:', error.message);
+        alert(error.message);
+      }
     }
   };
 
@@ -164,7 +184,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFA500', 
+    backgroundColor: '#FFA500', // Orange background (logo orange)
   },
   icon: {
     width: 100,
@@ -174,7 +194,7 @@ const styles = StyleSheet.create({
   formBox: {
     width: '90%',
     padding: 20,
-    backgroundColor: '#F9F6EE',
+    backgroundColor: '#F9F6EE', // Off-white background for the form
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
