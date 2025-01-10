@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
-import DogBreeds from '../../constants/DogBreeds';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { AntDesign, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 
 const LoginScreen: React.FC = () => {
   const [isSignup, setIsSignup] = useState(true); // Toggle between signup and login
@@ -11,9 +10,6 @@ const LoginScreen: React.FC = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [dogName, setDogName] = useState('');
-  const [dogBreed, setDogBreed] = useState('');
-  const [dogGender, setDogGender] = useState('Boy');
-  const [dogAge, setDogAge] = useState(1);
 
   const handleToggle = (targetSignup: boolean) => {
     if (isSignup !== targetSignup) {
@@ -25,16 +21,43 @@ const LoginScreen: React.FC = () => {
 
   const handleAction = () => {
     if (isSignup) {
-      console.log({ firstName, lastName, email, signupPassword, dogName, dogBreed, dogGender, dogAge });
-      // Signup logic here
+      // Signup Validation
+      if (!firstName || !lastName || !email || !signupPassword || !dogName) {
+        alert('Please fill out all fields.');
+        return;
+      }
+      if (!email.includes('@')) {
+        alert('Please enter a valid email address.');
+        return;
+      }
+      if (signupPassword.length < 6) {
+        alert('Password must be at least 6 characters long.');
+        return;
+      }
+      console.log('Sign-Up Successful:', { firstName, lastName, email, signupPassword, dogName });
+      // Proceed with sign-up logic
     } else {
-      console.log({ email, password });
-      // Login logic here
+      // Login Validation
+      if (!email || !password) {
+        alert('Please enter your email and password.');
+        return;
+      }
+      if (!email.includes('@')) {
+        alert('Please enter a valid email address.');
+        return;
+      }
+      if (password.length < 6) {
+        alert('Password must be at least 6 characters long.');
+        return;
+      }
+      console.log('Log-In Successful:', { email, password });
+      // Proceed with login logic
     }
   };
 
   return (
     <View style={styles.container}>
+      <Image source={require('../../assets/Icon/icon png.png')} style={styles.icon} />
       <View style={styles.formBox}>
         <Text style={styles.title}>Welcome to DogGo!</Text>
 
@@ -43,14 +66,17 @@ const LoginScreen: React.FC = () => {
           <>
             <TextInput
               style={styles.input}
-              placeholder="Full Name"
+              placeholder="First Name"
               placeholderTextColor="#666"
-              value={`${firstName} ${lastName}`.trim()}
-              onChangeText={(text) => {
-                const [first, ...last] = text.split(' ');
-                setFirstName(first);
-                setLastName(last.join(' '));
-              }}
+              value={firstName}
+              onChangeText={setFirstName}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Last Name"
+              placeholderTextColor="#666"
+              value={lastName}
+              onChangeText={setLastName}
             />
             <TextInput
               style={styles.input}
@@ -75,37 +101,6 @@ const LoginScreen: React.FC = () => {
               value={dogName}
               onChangeText={setDogName}
             />
-            <Picker
-              selectedValue={dogBreed}
-              style={styles.picker}
-              onValueChange={(itemValue) => setDogBreed(itemValue)}
-            >
-              {DogBreeds.map((breed) => (
-                <Picker.Item
-                  key={breed.value}
-                  label={breed.label}
-                  value={breed.value}
-                  color="#333"
-                />
-              ))}
-            </Picker>
-            <View style={styles.checkboxContainer}>
-              <TouchableOpacity onPress={() => setDogGender('Boy')}>
-                <Text style={[styles.checkbox, dogGender === 'Boy' && styles.selected]}>Boy</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => setDogGender('Girl')}>
-                <Text style={[styles.checkbox, dogGender === 'Girl' && styles.selected]}>Girl</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.ageContainer}>
-              <TouchableOpacity onPress={() => setDogAge(Math.max(1, dogAge - 1))}>
-                <Text style={styles.ageButton}>-</Text>
-              </TouchableOpacity>
-              <Text style={styles.ageText}>{dogAge} years</Text>
-              <TouchableOpacity onPress={() => setDogAge(dogAge + 1)}>
-                <Text style={styles.ageButton}>+</Text>
-              </TouchableOpacity>
-            </View>
           </>
         )}
 
@@ -130,6 +125,19 @@ const LoginScreen: React.FC = () => {
             />
           </>
         )}
+
+        {/* Social Login Buttons */}
+        <View style={styles.socialButtonsContainer}>
+          <TouchableOpacity style={styles.socialButton} onPress={() => console.log('Google Login')}>
+            <AntDesign name="google" size={24} color="#EA4335" />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.socialButton} onPress={() => console.log('Facebook Login')}>
+            <FontAwesome name="facebook" size={24} color="#1877F2" />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.socialButton} onPress={() => console.log('Apple Login')}>
+            <MaterialCommunityIcons name="apple" size={24} color="#000" />
+          </TouchableOpacity>
+        </View>
 
         {/* Action Buttons */}
         <View style={styles.buttonRow}>
@@ -156,12 +164,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFA500', // Orange background (logo orange)
+    backgroundColor: '#FFA500', 
+  },
+  icon: {
+    width: 100,
+    height: 100,
+    marginBottom: 20,
   },
   formBox: {
     width: '90%',
     padding: 20,
-    backgroundColor: '#F9F6EE', // Off-white background for the form
+    backgroundColor: '#F9F6EE',
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -186,48 +199,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     color: '#333',
   },
-  picker: {
-    width: '100%',
-    marginBottom: 10,
-    backgroundColor: '#FFF',
-    color: '#333',
-  },
-  checkboxContainer: {
-    flexDirection: 'row',
-    marginBottom: 10,
-    justifyContent: 'center',
-  },
-  checkbox: {
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#CCC',
-    borderRadius: 5,
-    marginHorizontal: 5,
-    textAlign: 'center',
-    color: '#333',
-  },
-  selected: {
-    backgroundColor: '#ADD8E6',
-  },
-  ageContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-    justifyContent: 'center',
-  },
-  ageButton: {
-    fontSize: 20,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: '#ADD8E6',
-    borderRadius: 5,
-    marginHorizontal: 5,
-    textAlign: 'center',
-  },
-  ageText: {
-    fontSize: 18,
-    color: '#333',
-  },
   buttonRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -249,6 +220,22 @@ const styles = StyleSheet.create({
   toggleButtonText: {
     color: '#333',
     fontSize: 16,
+  },
+  socialButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  socialButton: {
+    flex: 1,
+    padding: 10,
+    marginHorizontal: 5,
+    backgroundColor: '#FFF',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#CCC',
   },
 });
 
