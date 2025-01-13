@@ -4,6 +4,12 @@
   <dict>
     <key>CADisableMinimumFrameDurationOnPhone</key>
     <true/>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>We need your location to display the map and track routes.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>We need your location to provide accurate tracking even in the background.</string>
+    <key>MBXAccessToken</key>
+    <string>pk.eyJ1Ijoic3BhY2V5ZW11IiwiYSI6ImNtNXNyMTYzcDBncTMyanIwNDZkNGxlZncifQ.cHbJqBuMx8BY1KdKx3EmTA</string>
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>CFBundleDisplayName</key>
