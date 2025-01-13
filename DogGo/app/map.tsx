@@ -29,28 +29,38 @@ const Map = () => {
   const cacheRegion = async () => {
     if (!userLocation) return;
     try {
+      const [longitude, latitude] = userLocation;
+      const cacheName = `cached-region-${longitude.toFixed(2)}-${latitude.toFixed(2)}`;
+      
+      const existingPacks = await MapboxGL.offlineManager.getPacks();
+      const packExists = existingPacks.some(pack => pack.name === cacheName);
+  
+      if (packExists) {
+        console.log(`Cache already exists for region: ${cacheName}`);
+        setRegionLoaded(true);
+        return;
+      }
+  
       const bounds = [
-        [userLocation[0] - 0.05, userLocation[1] - 0.05], // Southwest corner
-        [userLocation[0] + 0.05, userLocation[1] + 0.05], // Northeast corner
+        [longitude - 0.05, latitude - 0.05], // Southwest corner
+        [longitude + 0.05, latitude + 0.05], // Northeast corner
       ];
-      const metadata = { name: 'Cached Region' };
-
+  
       await MapboxGL.offlineManager.createPack({
-        name: 'cached-region',
+        name: cacheName,
         bounds,
         minZoom: 10,
         maxZoom: 16,
         styleURL: MapboxGL.StyleURL.Street,
-        metadata,
+        metadata: { name: `Region centered at ${longitude}, ${latitude}` },
       });
-
-      Alert.alert('Success', 'Map region cached for offline use.');
+  
+      Alert.alert('Success', `Map region cached as ${cacheName}.`);
       setRegionLoaded(true);
     } catch (error) {
       console.error('Error caching region:', error);
     }
   };
-
   useEffect(() => {
     fetchUserLocation();
   }, []);
