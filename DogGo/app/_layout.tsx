@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import { useRouter, Slot } from 'expo-router';
+import 'mapbox-gl/dist/mapbox-gl.css';
+
 
 const Layout: React.FC = () => {
   const [isSplashVisible, setIsSplashVisible] = useState(true);

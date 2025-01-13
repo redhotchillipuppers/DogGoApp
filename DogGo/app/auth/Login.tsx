@@ -67,7 +67,7 @@ const LoginScreen: React.FC = () => {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         console.log('Log-In Successful:', userCredential.user);
         alert('Log-In Successful!');
-        navigation.navigate('Main'); // Example of navigating to main screen after login
+        router.push('/map');
       } catch (error) {
         console.error('Error logging in:', error.message);
         alert(error.message);
