@@ -14,21 +14,29 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true,
+<<<<<<< HEAD
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "We need your location to display the map and track routes.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "We need your location to provide accurate tracking even in the background."
       },
       "bundleIdentifier": "com.spaceyemu.DogGo"
+=======
+      "bundleIdentifier": "com.johnc.doggo"
+>>>>>>> 07493cb6c310eed79e5416ee78f7f92f130a6dc0
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+<<<<<<< HEAD
       "permissions": [
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION"
       ]
+=======
+      "package": "com.johnc.doggo"
+>>>>>>> 07493cb6c310eed79e5416ee78f7f92f130a6dc0
     },
     "web": {
       "bundler": "metro",
