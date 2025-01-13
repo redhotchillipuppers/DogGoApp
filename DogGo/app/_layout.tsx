@@ -10,7 +10,7 @@ const Layout: React.FC = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsSplashVisible(false); // Hide splash screen after 3 seconds
+      setIsSplashVisible(false);
     }, 3000);
 
     return () => clearTimeout(timer);
@@ -18,7 +18,7 @@ const Layout: React.FC = () => {
 
   useEffect(() => {
     if (!isSplashVisible) {
-      router.replace('/auth/Login'); // Navigate to the login screen
+      router.replace('/auth/Login'); 
     }
   }, [isSplashVisible, router]);
 
