@@ -4,7 +4,7 @@ import MapboxGL from '@rnmapbox/maps';
 import * as Location from 'expo-location'; // For device location
 
 // Set your Mapbox access token
-MapboxGL.setAccessToken('YOUR_MAPBOX_ACCESS_TOKEN');
+MapboxGL.setAccessToken('pk.eyJ1Ijoic3BhY2V5ZW11IiwiYSI6ImNtNXNyMTYzcDBncTMyanIwNDZkNGxlZncifQ.cHbJqBuMx8BY1KdKx3EmTA');
 
 const Map = () => {
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
