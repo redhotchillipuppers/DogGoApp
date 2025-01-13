@@ -8,6 +8,9 @@ const Layout: React.FC = () => {
   const [isSplashVisible, setIsSplashVisible] = useState(true);
   const router = useRouter();
 
+  console.log('isSplashVisible:', isSplashVisible);
+
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsSplashVisible(false);
@@ -35,7 +38,7 @@ const Layout: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Slot /> {/* Always render Slot for navigation */}
+      <Slot /> 
     </View>
   );
 };
