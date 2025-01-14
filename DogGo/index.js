@@ -1,5 +1,5 @@
 import { registerRootComponent } from 'expo';
 
-import App from './app/home'; // Adjust path to the main entry file
+import App from '../app/auth/Login'; // Adjust path to the Login file
 
 registerRootComponent(App);
