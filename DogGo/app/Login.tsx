@@ -77,7 +77,7 @@ const LoginScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Image source={require('../../assets/Icon/icon png.png')} style={styles.icon} />
+      <Image source={require('../assets/Icon/icon png.png')} style={styles.icon} />
       <View style={styles.formBox}>
         <Text style={styles.title}>Welcome to DogGo!</Text>
 
