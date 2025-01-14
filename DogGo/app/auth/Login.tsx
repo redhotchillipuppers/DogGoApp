@@ -44,7 +44,7 @@ const LoginScreen: React.FC = () => {
         const userCredential = await createUserWithEmailAndPassword(auth, email, signupPassword);
         console.log('Sign-Up Successful:', userCredential.user);
         alert('Sign-Up Successful!');
-        router.push('/DogEdit');
+        navigation.navigate('Home');
       } catch (error) {
         console.error('Error signing up:', error.message);
         alert(error.message);
@@ -67,7 +67,7 @@ const LoginScreen: React.FC = () => {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         console.log('Log-In Successful:', userCredential.user);
         alert('Log-In Successful!');
-        router.push('/map');
+        navigation.navigate('Home');
       } catch (error) {
         console.error('Error logging in:', error.message);
         alert(error.message);
