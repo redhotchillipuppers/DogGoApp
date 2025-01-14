@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { useRouter, Slot, router } from 'expo-router';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import Map from './map';
-
+import LoginScreen from './Login';
 
 // Screens
 const HomeScreen = () => (
@@ -28,20 +28,25 @@ const SettingsScreen = () => (
 // Bottom Tab Navigator
 const Tab = createBottomTabNavigator();
 
+const TabNavigator = () => (
+  <Tab.Navigator>
+    <Tab.Screen name="Home" component={HomeScreen} />
+    <Tab.Screen name="Map" component={Map} />
+    <Tab.Screen name="Profile" component={ProfileScreen} />
+    <Tab.Screen name="Settings" component={SettingsScreen} />
+  </Tab.Navigator>
+);
+
+// Stack Navigator for Login and Tabs
+const Stack = createStackNavigator();
+
 export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={{
-          headerShown: false, // Hide header if you want a cleaner look
-          tabBarStyle: { height: 60 }, // Customize tab bar height
-        }}
-      >
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Map" component={Map} />
-        <Tab.Screen name="Profile" component={ProfileScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
-      </Tab.Navigator>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Main" component={TabNavigator} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { AntDesign, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../firebase/firebaseConfig';
+import { auth } from '../firebase/firebaseConfig';
 import { useNavigation } from '@react-navigation/native';
 import { useRouter, Slot, router } from 'expo-router';
 
