@@ -1,5 +1,17 @@
 import { registerRootComponent } from 'expo';
+import { Text, View } from 'react-native';
 
-import App from './app/Login'; // Adjust path to the Login file
+const Placeholder = () => (
+  <View>
+    <Text>App Loaded!</Text>
+  </View>
+);
 
-registerRootComponent(App);
+registerRootComponent(Placeholder);
+
+
+//import { registerRootComponent } from 'expo';
+
+//import App from './app/Login'; // Adjust path to the Login file
+
+//registerRootComponent(App);
